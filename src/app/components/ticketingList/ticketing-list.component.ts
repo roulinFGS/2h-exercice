@@ -16,7 +16,6 @@ export class TicketingListComponent implements OnDestroy {
   public readonly users$: Observable<User[]> = this.backendService.users();
   public readonly tickets$: Observable<Ticket[]> = this.backendService.tickets();
   public tickets: Ticket[];
-  private ticketId = null;
   public newContent: FormGroup;
   private newTicketSubscription: Subscription;
   private ticketSubscription: Subscription;
@@ -36,8 +35,9 @@ export class TicketingListComponent implements OnDestroy {
 
   }
 
-  onSelectTicketClick() {
-    this.router.navigate(['/tickets'], { queryParams: { ticketId: this.ticketId } });
+  onSelectTicketClick(id: Number) {
+    console.log("TicketingListComponent -> onTicketClick -> id", id);
+    this.router.navigate(['/tickets'], { queryParams: { ticketId: id } });
   }
 
   onNewTicketClick($event: any) {

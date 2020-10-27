@@ -1,5 +1,5 @@
 <ul >
-    <li *ngFor="let ticket of tickets">
+    <li *ngFor="let ticket of tickets" (click)="onSelectTicketClick(ticket.id)">
         Ticket: {{ ticket.id }}, {{ ticket.description }}
     </li>
     <li *ngIf="!loading">

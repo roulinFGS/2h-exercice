@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BackendService } from '../../backend.service';
 import { Observable, Subscription } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Ticket } from '../../../interfaces/ticket.interface';
 import { User } from '../../../interfaces/user.interface';
+import { Ticket } from 'src/interfaces/ticket.interface';
 
 @Component({
   selector: 'app-ticket',
@@ -13,33 +14,55 @@ import { User } from '../../../interfaces/user.interface';
 
 export class TicketComponent implements OnInit, OnDestroy {
   public readonly users$: Observable<User[]> = this.backendService.users();
-  public readonly tickets$: Observable<Ticket[]> = this.backendService.tickets();
-  private sub: Subscription
+  private idSubscription: Subscription;
+  private completedSubscription: Subscription;
   ticketForm: FormGroup;
   id= null;
   constructor(private readonly backendService: BackendService, public activatedRoute: ActivatedRoute, private fb: FormBuilder) { 
-    this.ticketForm = this.fb.group({
-      completed: [false, [Validators.required]], // boolean
-      assigneeId: [null], // number
-      description: ['', [Validators.required]] // string
-    })
   }
-
+  //ticket
   ngOnInit(): void {
-    console.log("TicketComponent -> ngOnInit -> this.activatedRoute", this.activatedRoute.queryParams)
-    this.sub = this.activatedRoute.queryParams
-       .subscribe(params => {
-
-         this.id = params.ticketId ? params.ticketId : null; 
-         console.log('The id of this route is: ', this.id);     
-    });
+    this.idSubscription = this.activatedRoute.queryParams
+    .pipe(
+      mergeMap((params: { ticketId }) => {
+        this.id = params.ticketId;
+        return this.backendService.ticket(params.ticketId);        
+      })
+    )
+    .subscribe((ticket: Ticket) => {
+      console.log("TicketComponent -> ticket", ticket)
+      this.ticketForm = this.getTicketForm(ticket);
+      this.handleCompletionPipes();
+    },
+    err => console.log('error ?? instead?', err)
+    );
   }
 
-  save() {
-    console.log('Save()');     
+  handleCompletionPipes() {
+    const completedObservable = this.ticketForm.get('completed');
+    this.completedSubscription = completedObservable.valueChanges
+    .pipe(
+      mergeMap((completed: boolean) => {
+        return this.backendService.complete(this.id, completed);        
+      })
+    )
+    .subscribe(value => console.log('value !!!! ', value));
+  }
+
+  getTicketForm(ticket: Ticket): FormGroup {
+    console.log("getTicketForm -> ticket", ticket)
+    const values = {
+      id: { value: ticket.id, disabled: true },
+      completed: ticket.completed,
+      assigneeId: { value: ticket.assigneeId, disabled: true },
+      description: { value: ticket.description, disabled: true }
+    }
+
+    return this.fb.group(values);
   }
 
   ngOnDestroy() {
-    this.sub && this.sub.unsubscribe();
+    this.idSubscription && this.idSubscription.unsubscribe();
+    this.completedSubscription && this.completedSubscription.unsubscribe();
   }
 }

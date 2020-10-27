@@ -1,17 +1,44 @@
-<form novalidate
-(ngSubmit)="save()"
+<form novalidate *ngIf="id && ticketForm"
 [formGroup]="ticketForm">
-    <label 
+       <label 
+       for="idId">id</label>
+       <div>
+       <input
+       id="idId"
+       type="text"
+       formControlName="id"
+       name="id"
+       />
+       </div>
+       <label 
+       for="assigneeId">assigneeId</label>
+       <div>
+       <input
+       id="assigneeId"
+       type="text"
+       formControlName="assigneeId"
+       name="assigneeId"
+       />
+       </div>
+       <label 
            for="descriptionId">Description</label>
-    <div>
-      <input
+       <div>
+       <input
              id="descriptionId"
              type="text"
-             placeholder="description is smandatory"
              formControlName="description"
              name="description"
-    />
-    </div>
-
-
+       />
+       </div>
+       <label 
+           for="completedId">completed</label>
+       <div>
+       <input
+             id="completedId"
+             type="checkbox"
+             formControlName="completed"
+             name="completed"
+       />
+       </div>
 </form>
+<div *ngIf="!ticketForm">Loading...</div>
