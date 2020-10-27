@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BackendService } from '../../backend.service';
 import { Observable, Subscription } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { debounceTime, mergeMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../../interfaces/user.interface';
@@ -33,6 +33,7 @@ export class TicketComponent implements OnInit, OnDestroy {
       console.log("TicketComponent -> ticket", ticket)
       this.ticketForm = this.getTicketForm(ticket);
       this.handleCompletionPipes();
+      this.handleAssignementPipes();
     },
     err => console.log('error ?? instead?', err)
     );
@@ -46,7 +47,21 @@ export class TicketComponent implements OnInit, OnDestroy {
         return this.backendService.complete(this.id, completed);        
       })
     )
-    .subscribe(value => console.log('value !!!! ', value));
+    .subscribe(value => console.log('completed !!!! ', value));
+    // todo error handling?
+  }
+
+  handleAssignementPipes() {
+    const completedObservable = this.ticketForm.get('assigneeId');
+    this.completedSubscription = completedObservable.valueChanges
+    .pipe(
+      debounceTime(800),
+      mergeMap((assigneeId: number) => {
+        return this.backendService.assign(this.id, assigneeId);        
+      })
+    )
+    .subscribe(value => console.log('assignee !!!! ', value));
+    // todo error handling?
   }
 
   getTicketForm(ticket: Ticket): FormGroup {
@@ -54,7 +69,7 @@ export class TicketComponent implements OnInit, OnDestroy {
     const values = {
       id: { value: ticket.id, disabled: true },
       completed: ticket.completed,
-      assigneeId: { value: ticket.assigneeId, disabled: true },
+      assigneeId: ticket.assigneeId,
       description: { value: ticket.description, disabled: true }
     }
 
