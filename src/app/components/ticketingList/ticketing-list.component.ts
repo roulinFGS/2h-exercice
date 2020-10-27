@@ -19,7 +19,8 @@ export class TicketingListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onAddClick($event) {
-    this.router.navigate([`/ticket/${this.ticketId}`]);
+  onAddClick() {
+    console.log("TicketingListComponent -> onAddClick -> value", this.ticketId);
+    this.router.navigate(['/tickets'], { queryParams: { ticketId: this.ticketId } });
   }
 }

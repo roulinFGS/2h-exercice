@@ -1,0 +1,18 @@
+<form novalidate
+(ngSubmit)="save()"
+[formGroup]="ticketForm">
+<div>
+    <label 
+           for="descriptionId">Description</label>
+    <div>
+      <input
+             id="descriptionId"
+             type="text"
+             placeholder="description is smandatory"
+             formControlName="description"
+             name="description"
+    />
+    </div>
+
+
+</form>
