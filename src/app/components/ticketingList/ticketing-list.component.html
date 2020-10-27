@@ -1,0 +1,9 @@
+<div>
+    <button (click)='onAddClick($event)'>add</button>
+</div>
+
+<ul>
+    <li *ngFor="let ticket of tickets$ | async">
+        Ticket: {{ ticket.id }}, {{ ticket.description }}
+    </li>
+</ul>
