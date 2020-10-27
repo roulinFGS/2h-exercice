@@ -2,17 +2,17 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TicketingListComponent } from './ticketing-list.component';
+import { TicketComponent } from './ticket.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TicketingListComponent
+    component: TicketComponent
   }
 ];
 
 @NgModule({
-  declarations: [TicketingListComponent],
+  declarations: [TicketComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
@@ -20,4 +20,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class TicketingListModule { }
+export class TicketModule { }

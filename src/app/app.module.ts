@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { BackendService } from './backend.service';
 import { AppRoutingModule } from './app-routing.module';
 import { TicketingListModule } from './components/ticketingList/ticketing-list.module';
+import { TicketModule } from './components/ticket/ticket.module';
 @NgModule({
     declarations: [AppComponent],
     imports: [

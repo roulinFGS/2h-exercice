@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: './components/ticketingList/ticketing-list.module#TicketingListModule'
   },
   {
+    path: 'tickets',
+    loadChildren: './components/ticket/ticket.module#TicketModule'
+  },
+  {
     path: '',
     redirectTo: '/ticketing-list',
     pathMatch: 'full'
