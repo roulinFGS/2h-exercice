@@ -3,9 +3,7 @@
         Ticket: {{ ticket.id }}, {{ ticket.description }}
     </li>
     <li *ngIf="!loading">
-        <form [formGroup]="newContent" novalidate>
-            <textarea (keyup.enter)="onNewTicketClick($event)" formControlName="description" id="w3review" name="w3review" rows="4" cols="50" placeholder="new ticket"></textarea>
-        </form>
+        <textarea (keyup.enter)="onNewTicketClick($event)" [ngModel]="newTicket.value" #newTicket='ngModel' id="newTicket" name="newTicket" rows="4" cols="50" placeholder="new ticket"></textarea>
     </li>
 </ul>
 <div *ngIf="loading">Loading...</div>

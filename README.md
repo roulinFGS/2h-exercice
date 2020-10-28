@@ -36,3 +36,12 @@ If you bump it up to say 10 seconds, would the app still work correctly?
 Please send us the link to your publicly hosted git repository.
 We will continue to work on it during the pair-programming sessions.
 Please also indicate approximately how long you spent on the submission.
+
+
+Use on bash for windows:
+sudo apt-get install chromium-chromedriver
+export CHROME_BIN='/usr/bin/chromium-driver'
+ng test
+
+export CHROME_BIN='/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome'
+

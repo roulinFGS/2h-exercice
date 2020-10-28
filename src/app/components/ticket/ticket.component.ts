@@ -30,12 +30,11 @@ export class TicketComponent implements OnInit, OnDestroy {
       })
     )
     .subscribe((ticket: Ticket) => {
-      console.log("TicketComponent -> ticket", ticket)
       this.ticketForm = this.getTicketForm(ticket);
       this.handleCompletionPipes();
       this.handleAssignementPipes();
     },
-    err => console.log('error ?? instead?', err)
+    err => {  /** TODO */}
     );
   }
 
@@ -65,7 +64,6 @@ export class TicketComponent implements OnInit, OnDestroy {
   }
 
   getTicketForm(ticket: Ticket): FormGroup {
-    console.log("getTicketForm -> ticket", ticket)
     const values = {
       id: { value: ticket.id, disabled: true },
       completed: ticket.completed,
