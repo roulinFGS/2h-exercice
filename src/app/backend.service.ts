@@ -9,7 +9,7 @@ import { User } from '../interfaces/user.interface';
  * It has some intentional errors that you might have to fix.
  */
 
-function randomDelay() {
+function randomDelay(): number {
     return Math.random() * 4000;
 }
 
@@ -32,7 +32,7 @@ export class BackendService {
 
     public storedUsers: User[] = [{ id: 111, name: 'Victor' }];
 
-    private lastId: number = 1;
+    private lastId = 1;
 
     private findUserById = id => this.storedUsers.find((user: User) => user.id === +id);
     private findTicketById = id => this.storedTickets.find((ticket: Ticket) => ticket.id === +id);

@@ -31,12 +31,12 @@ export class TicketingListComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSelectTicketClick(id: Number) {
+  onSelectTicketClick(id: number): void {
     this.router.navigate(['/tickets'], { queryParams: { ticketId: id } });
   }
 
-  onNewTicketClick($event: any) {
-    const value = $event['target'] ? $event['target']['value'] : null;
+  onNewTicketClick($event: any): void {
+    const value = $event.target ? $event.target.value : null;
     this.loading = true;
     this.newTicketSubscription = this.backendService
     .newTicket({description: value })
@@ -46,9 +46,9 @@ export class TicketingListComponent implements OnInit, OnDestroy {
     .subscribe();
   }
 
-  ngOnDestroy() {
-    this.newTicketSubscription && this.newTicketSubscription.unsubscribe();
-    this.ticketSubscription && this.ticketSubscription.unsubscribe();
+  ngOnDestroy(): void {
+    this.newTicketSubscription?.unsubscribe();
+    this.ticketSubscription?.unsubscribe();
   }
 
 }

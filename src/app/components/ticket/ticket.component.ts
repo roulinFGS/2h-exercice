@@ -17,16 +17,16 @@ export class TicketComponent implements OnInit, OnDestroy {
   private idSubscription: Subscription;
   private completedSubscription: Subscription;
   ticketForm: FormGroup;
-  id= null;
-  constructor(private readonly backendService: BackendService, public activatedRoute: ActivatedRoute, private fb: FormBuilder) { 
+  id = null;
+  constructor(private readonly backendService: BackendService, public activatedRoute: ActivatedRoute, private fb: FormBuilder) {
   }
-  //ticket
+  // ticket
   ngOnInit(): void {
     this.idSubscription = this.activatedRoute.queryParams
     .pipe(
       mergeMap((params: { ticketId }) => {
         this.id = params.ticketId;
-        return this.backendService.ticket(params.ticketId);        
+        return this.backendService.ticket(params.ticketId);
       })
     )
     .subscribe((ticket: Ticket) => {
@@ -38,25 +38,25 @@ export class TicketComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleCompletionPipes() {
+  handleCompletionPipes(): void {
     const completedObservable = this.ticketForm.get('completed');
     this.completedSubscription = completedObservable.valueChanges
     .pipe(
       mergeMap((completed: boolean) => {
-        return this.backendService.complete(this.id, completed);        
+        return this.backendService.complete(this.id, completed);
       })
     )
     .subscribe(value => console.log('completed !!!! ', value));
     // todo error handling?
   }
 
-  handleAssignementPipes() {
+  handleAssignementPipes(): void {
     const completedObservable = this.ticketForm.get('assigneeId');
     this.completedSubscription = completedObservable.valueChanges
     .pipe(
       debounceTime(800),
       mergeMap((assigneeId: number) => {
-        return this.backendService.assign(this.id, assigneeId);        
+        return this.backendService.assign(this.id, assigneeId);
       })
     )
     .subscribe(value => console.log('assignee !!!! ', value));
@@ -69,13 +69,13 @@ export class TicketComponent implements OnInit, OnDestroy {
       completed: ticket.completed,
       assigneeId: ticket.assigneeId,
       description: { value: ticket.description, disabled: true }
-    }
+    };
 
     return this.fb.group(values);
   }
 
-  ngOnDestroy() {
-    this.idSubscription && this.idSubscription.unsubscribe();
-    this.completedSubscription && this.completedSubscription.unsubscribe();
+  ngOnDestroy(): void {
+    this.idSubscription?.unsubscribe();
+    this.completedSubscription?.unsubscribe();
   }
 }

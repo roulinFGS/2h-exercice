@@ -26,6 +26,7 @@ describe('ticketing-list', () => {
     let fixture: ComponentFixture<TicketingListComponent>;
     const mockBackendService = jasmine.createSpyObj(['tickets', 'newTicket']);
     mockBackendService.tickets.and.returnValue(of(storedTickets));
+    mockBackendService.newTicket.and.returnValue(of('test'));
     const mockRouter = jasmine.createSpyObj(['navigate']);
 
     beforeEach(() => {
@@ -61,16 +62,15 @@ describe('ticketing-list', () => {
         expect(el.innerHTML).toContain(storedTickets[0].description);
     });
     it(`should call backend service creation when entering a new ticket`, async () => {
-        spyOn(fixture.componentInstance, "onNewTicketClick")
         fixture.detectChanges();
 
         const el = fixture.debugElement.query(By.css('textarea[name="newTicket"]')).nativeElement;
         expect(el).toBeTruthy();
         const newContent = 'something';
         el.value = newContent;
-        fixture.componentInstance.newTicket = "toto";
-        el.dispatchEvent((new KeyboardEvent('keyup',{'key':'enter'})));
+        fixture.componentInstance.newTicket = 'toto';
+        el.dispatchEvent((new KeyboardEvent('keyup', {key: 'enter'})));
         fixture.detectChanges();
-        expect(fixture.componentInstance.onNewTicketClick).toHaveBeenCalled();        
+        expect(mockBackendService.newTicket).toHaveBeenCalled();
     });
 });
